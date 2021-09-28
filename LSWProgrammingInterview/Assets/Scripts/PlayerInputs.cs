@@ -15,7 +15,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
     ""name"": ""PlayerInputs"",
     ""maps"": [
         {
-            ""name"": ""Movement"",
+            ""name"": ""Basic"",
             ""id"": ""91ecf328-aebb-4b49-853a-607b534e01a9"",
             ""actions"": [
                 {
@@ -23,6 +23,14 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""8c879924-6a4d-4fe0-bf87-434c0ae6c004"",
                     ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""84dcc0c7-55a8-4dd4-aae9-ee9dafe6bcad"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -82,15 +90,27 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c994192b-350d-4af5-b000-5064903cb45a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
     ""controlSchemes"": []
 }");
-        // Movement
-        m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
-        m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
+        // Basic
+        m_Basic = asset.FindActionMap("Basic", throwIfNotFound: true);
+        m_Basic_Move = m_Basic.FindAction("Move", throwIfNotFound: true);
+        m_Basic_Interaction = m_Basic.FindAction("Interaction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -137,40 +157,49 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         asset.Disable();
     }
 
-    // Movement
-    private readonly InputActionMap m_Movement;
-    private IMovementActions m_MovementActionsCallbackInterface;
-    private readonly InputAction m_Movement_Move;
-    public struct MovementActions
+    // Basic
+    private readonly InputActionMap m_Basic;
+    private IBasicActions m_BasicActionsCallbackInterface;
+    private readonly InputAction m_Basic_Move;
+    private readonly InputAction m_Basic_Interaction;
+    public struct BasicActions
     {
         private @PlayerInputs m_Wrapper;
-        public MovementActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_Movement_Move;
-        public InputActionMap Get() { return m_Wrapper.m_Movement; }
+        public BasicActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Move => m_Wrapper.m_Basic_Move;
+        public InputAction @Interaction => m_Wrapper.m_Basic_Interaction;
+        public InputActionMap Get() { return m_Wrapper.m_Basic; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MovementActions set) { return set.Get(); }
-        public void SetCallbacks(IMovementActions instance)
+        public static implicit operator InputActionMap(BasicActions set) { return set.Get(); }
+        public void SetCallbacks(IBasicActions instance)
         {
-            if (m_Wrapper.m_MovementActionsCallbackInterface != null)
+            if (m_Wrapper.m_BasicActionsCallbackInterface != null)
             {
-                @Move.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnMove;
-                @Move.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnMove;
-                @Move.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnMove;
+                @Move.started -= m_Wrapper.m_BasicActionsCallbackInterface.OnMove;
+                @Move.performed -= m_Wrapper.m_BasicActionsCallbackInterface.OnMove;
+                @Move.canceled -= m_Wrapper.m_BasicActionsCallbackInterface.OnMove;
+                @Interaction.started -= m_Wrapper.m_BasicActionsCallbackInterface.OnInteraction;
+                @Interaction.performed -= m_Wrapper.m_BasicActionsCallbackInterface.OnInteraction;
+                @Interaction.canceled -= m_Wrapper.m_BasicActionsCallbackInterface.OnInteraction;
             }
-            m_Wrapper.m_MovementActionsCallbackInterface = instance;
+            m_Wrapper.m_BasicActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Interaction.started += instance.OnInteraction;
+                @Interaction.performed += instance.OnInteraction;
+                @Interaction.canceled += instance.OnInteraction;
             }
         }
     }
-    public MovementActions @Movement => new MovementActions(this);
-    public interface IMovementActions
+    public BasicActions @Basic => new BasicActions(this);
+    public interface IBasicActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
     }
 }

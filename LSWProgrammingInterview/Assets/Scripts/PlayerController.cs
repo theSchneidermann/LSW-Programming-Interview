@@ -10,6 +10,19 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     public float speed;
 
+    public SpriteRenderer Head;
+    public SpriteRenderer Torso;
+    public SpriteRenderer Pelvis;
+    public SpriteRenderer lShoulder;
+    public SpriteRenderer rShoulder;
+    public SpriteRenderer lBoot;
+    public SpriteRenderer rBoot;
+
+
+
+    public List<Sprite> Heads;
+    public List<Sprite> Torsos;
+    public List<Sprite> Pelvises;
 
 
 
@@ -24,7 +37,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector2 moveInput = PlayerInput.Movement.Move.ReadValue<Vector2>();
+        Vector2 moveInput = PlayerInput.Basic.Move.ReadValue<Vector2>();
         rb.velocity = moveInput * speed;
 
 
@@ -55,5 +68,18 @@ public class PlayerController : MonoBehaviour
     {
         PlayerInput.Disable();
     }
+
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        
+        if (collision.gameObject.CompareTag("Dummy"))
+        {
+            PlayerInput.Basic.Interaction.performed += _ => collision.gameObject.GetComponent<Dummy>().ChangeClothes() ;
+        }
+    }
+
+    
+
 
 }

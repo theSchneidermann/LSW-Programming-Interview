@@ -2,7 +2,7 @@
     "name": "PlayerInputs",
     "maps": [
         {
-            "name": "Movement",
+            "name": "Basic",
             "id": "91ecf328-aebb-4b49-853a-607b534e01a9",
             "actions": [
                 {
@@ -10,6 +10,14 @@
                     "type": "PassThrough",
                     "id": "8c879924-6a4d-4fe0-bf87-434c0ae6c004",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Interaction",
+                    "type": "Button",
+                    "id": "84dcc0c7-55a8-4dd4-aae9-ee9dafe6bcad",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -69,6 +77,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c994192b-350d-4af5-b000-5064903cb45a",
+                    "path": "<Keyboard>/space",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
