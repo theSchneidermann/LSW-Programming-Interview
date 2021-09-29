@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static bool canMove = true;
 
-    private PlayerInputs PlayerInput;
+
+    Vector2 movement;
     private Rigidbody2D rb;
     private Animator anim;
     public float speed;
@@ -25,11 +27,12 @@ public class PlayerController : MonoBehaviour
     public List<Sprite> Pelvises;
 
 
+ 
 
     // Start is called before the first frame update
     void Awake()
     {
-        PlayerInput = new PlayerInputs();
+        
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
@@ -37,13 +40,23 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector2 moveInput = PlayerInput.Basic.Move.ReadValue<Vector2>();
-        rb.velocity = moveInput * speed;
+
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
+
+        if (canMove)
+            Movement();
+       
+    }
 
 
-        if (moveInput.x == -1)
-            gameObject.transform.rotation = new Quaternion(0,180,0,0);
-        else if(moveInput.x == 1)
+    void Movement()
+    {
+        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+
+        if (Input.GetKey(KeyCode.A))
+            gameObject.transform.rotation = new Quaternion(0, 180, 0, 0);
+        else if (Input.GetKey(KeyCode.D))
             gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
 
         if (rb.velocity.magnitude > 0)
@@ -59,24 +72,26 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void OnEnable()
-    {
-        PlayerInput.Enable();
-    }
-
-    private void OnDisable()
-    {
-        PlayerInput.Disable();
-    }
-
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        
-        if (collision.gameObject.CompareTag("Dummy"))
+
+        if (Input.GetKey(KeyCode.Space))
         {
-            PlayerInput.Basic.Interaction.performed += _ => collision.gameObject.GetComponent<Dummy>().ChangeClothes() ;
+            if (collision.gameObject.CompareTag("Dummy"))
+            {
+                collision.gameObject.GetComponent<Dummy>().ChangeClothes();
+            }
+            if (collision.gameObject.CompareTag("NPC"))
+            {
+                canMove = false;
+                collision.gameObject.GetComponent<NPC>().TriggerDialogue(NPC.timesTalked);
+
+            }
         }
+
+        
+       
     }
 
     

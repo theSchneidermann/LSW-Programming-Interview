@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Dummy : MonoBehaviour
 {
+    
+
+
     PlayerController p;
 
     public Sprite Head;
@@ -31,6 +34,8 @@ public class Dummy : MonoBehaviour
         p.rShoulder.sprite = rShoulder;
         p.lBoot.sprite = lBoot;
         p.rBoot.sprite = rBoot;
+
+        NPC.timesTalked = 3;
 
     }
 
