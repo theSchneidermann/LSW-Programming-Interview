@@ -22,6 +22,8 @@ public class DialogueSystem : MonoBehaviour
     public void StartDialogue(Dialogue dialogue)
     {
         textBox.alpha = 1;
+        textBox.blocksRaycasts = true;
+        textBox.interactable = true;
 
         nameTxt.text = dialogue.Name;
 
@@ -54,6 +56,8 @@ public class DialogueSystem : MonoBehaviour
     void EndDialogue()
     {
         textBox.alpha = 0;
+        textBox.blocksRaycasts = false;
+        textBox.interactable = false;
         if (NPC.next)
         {
             NPC.timesTalked = 2;

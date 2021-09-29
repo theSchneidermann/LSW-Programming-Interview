@@ -1,24 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public static bool canMove = true;
+    public int money;
+    public Text moneyTxt;
+    public CanvasGroup Wardrobe;
 
+    [Space]
 
     Vector2 movement;
     private Rigidbody2D rb;
     private Animator anim;
     public float speed;
 
+    [Space]
     public SpriteRenderer Head;
     public SpriteRenderer Torso;
     public SpriteRenderer Pelvis;
-    public SpriteRenderer lShoulder;
-    public SpriteRenderer rShoulder;
-    public SpriteRenderer lBoot;
-    public SpriteRenderer rBoot;
 
 
 
@@ -40,9 +42,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        moneyTxt.text = "$" + money.ToString();
+
 
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+
+
+        
 
         if (canMove)
             Movement();
@@ -54,12 +61,14 @@ public class PlayerController : MonoBehaviour
     {
         rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
 
+        Debug.Log(rb.velocity);
+
         if (Input.GetKey(KeyCode.A))
             gameObject.transform.rotation = new Quaternion(0, 180, 0, 0);
         else if (Input.GetKey(KeyCode.D))
             gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
 
-        if (rb.velocity.magnitude > 0)
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             anim.SetBool("Idle", false);
             anim.SetBool("Walking", true);
@@ -72,29 +81,32 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
     private void OnCollisionStay2D(Collision2D collision)
     {
-
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.F))
         {
-            if (collision.gameObject.CompareTag("Dummy"))
-            {
-                collision.gameObject.GetComponent<Dummy>().ChangeClothes();
-            }
+            
             if (collision.gameObject.CompareTag("NPC"))
             {
                 canMove = false;
                 collision.gameObject.GetComponent<NPC>().TriggerDialogue(NPC.timesTalked);
 
             }
+            if (collision.gameObject.CompareTag("Dummy"))
+            {
+                collision.gameObject.GetComponent<Dummy>().ChangeClothes();
+            }
+            if (collision.gameObject.CompareTag("Wardrobe"))
+            {
+                canMove = false;
+                Wardrobe.alpha = 1;
+                Wardrobe.blocksRaycasts = true;
+                Wardrobe.interactable = true;
+            }
         }
-
-        
-       
     }
 
-    
+
 
 
 }

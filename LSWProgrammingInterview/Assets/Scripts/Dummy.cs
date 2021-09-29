@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class Dummy : MonoBehaviour
 {
-    
 
+    bool bought;
+
+    [SerializeField]int price;
 
     PlayerController p;
 
     public Sprite Head;
     public Sprite Torso;
     public Sprite Pelvis;
-    public Sprite lShoulder;
-    public Sprite rShoulder;
 
-    public Sprite lBoot;
-    public Sprite rBoot;
 
 
     private void Start()
@@ -30,10 +28,17 @@ public class Dummy : MonoBehaviour
         p.Head.sprite = Head;
         p.Torso.sprite = Torso;
         p.Pelvis.sprite = Pelvis;
-        p.lShoulder.sprite = lShoulder;
-        p.rShoulder.sprite = rShoulder;
-        p.lBoot.sprite = lBoot;
-        p.rBoot.sprite = rBoot;
+
+
+
+        if (!bought)
+        {
+            p.money -= price;
+            bought = true;
+        }
+            
+
+
 
         NPC.timesTalked = 3;
 
