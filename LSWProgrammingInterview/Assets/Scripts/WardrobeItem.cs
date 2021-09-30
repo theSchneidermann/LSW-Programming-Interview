@@ -29,9 +29,18 @@ public class WardrobeItem : MonoBehaviour
 
     public void Buy()
     {
-        
-        FindObjectOfType<PlayerController>().UpdateClothes(piecePart, piece);
-        
+        PlayerController p = FindObjectOfType<PlayerController>().GetComponent<PlayerController>();
+        if (!p.allClothes.Contains(piece))
+        {
+            p.UpdateClothes(piecePart, piece);
+            p.allClothes.Add(piece);
+            p.money -= price;
+            CancelBuy();
+        }
+        else
+            p.UpdateClothes(piecePart, piece);
+
+
     }
 
 

@@ -7246,9 +7246,8 @@ MonoBehaviour:
     sentences:
     - Welcome to my thives gear shop!
     - That's rigth. I oppened a thives gear shop, so what?
-    - You can try the outfits on the dummies on the left there by going up to them
+    - You can buy the outfits on the dummies on the left there by going up to them
       and pressing [SPACEBAR].
-    - Then come back to me so I can get my money.
   dialogueTwo:
     Name: Shop Keeper
     sentences:
