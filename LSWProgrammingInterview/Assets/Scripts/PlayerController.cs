@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer Pelvis;
 
 
-
+    
     public List<Sprite> allClothes;
     
 
