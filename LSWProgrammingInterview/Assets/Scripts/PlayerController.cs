@@ -24,9 +24,8 @@ public class PlayerController : MonoBehaviour
 
 
 
-    public List<Sprite> Heads;
-    public List<Sprite> Torsos;
-    public List<Sprite> Pelvises;
+    public List<Sprite> allClothes;
+    
 
 
  
@@ -34,9 +33,14 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        
+        allClothes = new List<Sprite>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+        allClothes.Add(Head.sprite);
+        allClothes.Add(Torso.sprite);
+        allClothes.Add(Pelvis.sprite);
+
     }
 
     // Update is called once per frame
@@ -61,7 +65,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
 
-        Debug.Log(rb.velocity);
+        
 
         if (Input.GetKey(KeyCode.A))
             gameObject.transform.rotation = new Quaternion(0, 180, 0, 0);
@@ -81,23 +85,38 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    public void UpdateClothes()
+    {
+
+    }
+
+
+
+
+
     private void OnCollisionStay2D(Collision2D collision)
     {
+        
+
         if (Input.GetKey(KeyCode.F))
         {
             
+            
+            if (collision.gameObject.CompareTag("Dummy"))
+            {
+                collision.gameObject.GetComponent<Dummy>().ChangeClothes();
+                
+            }
             if (collision.gameObject.CompareTag("NPC"))
             {
                 canMove = false;
                 collision.gameObject.GetComponent<NPC>().TriggerDialogue(NPC.timesTalked);
+               
 
-            }
-            if (collision.gameObject.CompareTag("Dummy"))
-            {
-                collision.gameObject.GetComponent<Dummy>().ChangeClothes();
             }
             if (collision.gameObject.CompareTag("Wardrobe"))
             {
+               // collision.gameObject.GetComponent<Wardrobe>().GetClothes();
                 canMove = false;
                 Wardrobe.alpha = 1;
                 Wardrobe.blocksRaycasts = true;

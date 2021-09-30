@@ -25,22 +25,26 @@ public class Dummy : MonoBehaviour
 
     public void ChangeClothes()
     {
+        if (!p.allClothes.Contains(Head) || !p.allClothes.Contains(Torso) || !p.allClothes.Contains(Pelvis))
+        {
+            p.allClothes.Add(Head);
+            p.allClothes.Add(Torso);
+            p.allClothes.Add(Pelvis);
+        }
+        
+
         p.Head.sprite = Head;
         p.Torso.sprite = Torso;
         p.Pelvis.sprite = Pelvis;
 
-
-
         if (!bought)
         {
             p.money -= price;
+            NPC.timesTalked = 3;
             bought = true;
+
         }
             
-
-
-
-        NPC.timesTalked = 3;
 
     }
 
