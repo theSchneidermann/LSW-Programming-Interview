@@ -85,9 +85,20 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public void UpdateClothes()
+    public void UpdateClothes(string part, Sprite clothing)
     {
-
+        switch (part)
+        {
+            case "Head":
+                Head.sprite = clothing;
+                break;
+            case "Torso":
+                Torso.sprite = clothing;
+                break;
+            case "Pelvis":
+                Pelvis.sprite = clothing;
+                break;
+        }
     }
 
 
@@ -125,7 +136,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    public void activateWalk()
+    {
+        canMove = true;
+    }
 
 
 }

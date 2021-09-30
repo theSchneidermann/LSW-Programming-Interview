@@ -8,14 +8,17 @@ public class Wardrobe : MonoBehaviour
 
 
     public List<Sprite> clothes;
-    public List<GameObject> clothesObjs;
+    List<WardrobeItem> items;
+
     PlayerController player;
 
     // Start is called before the first frame update
     void Start()
     {
         player = FindObjectOfType<PlayerController>().GetComponent<PlayerController>();
-        
+
+        items = new List<WardrobeItem>(FindObjectsOfType<WardrobeItem>());
+
     }
 
     // Update is called once per frame
@@ -26,31 +29,36 @@ public class Wardrobe : MonoBehaviour
 
     public void GetClothes()
     {
-        Button b;
-                
         
+        foreach(WardrobeItem i in items)
+        {
+            i.Show();
+        } 
 
         foreach (Sprite c in player.allClothes)
         {
             if (clothes.Contains(c))
             {
                 //Disable Buy from these clothes 
-                clothesObjs = new List<GameObject>(clothes.Count);
-                clothesObjs.Add(GameObject.Find(c.name + "_UI").gameObject);
-                foreach(GameObject o in clothesObjs)
-                {
-                    print(o.name);
-                    b = o.GetComponent<Button>();
-                    b.interactable = false;
-                }
+
+                GameObject.Find(c.name + "_UI").GetComponent<WardrobeItem>().CancelBuy();
+               
             }
         }
     }
 
-
-    public void Clear()
+    public void SetUiStuffOn(CanvasGroup cg)
     {
-        clothesObjs.Clear();
+        cg.alpha = 1;
+        cg.interactable = true;
+        cg.blocksRaycasts = true;
+    }
+
+    public void SetUiStuffOff(CanvasGroup cg)
+    {
+        cg.alpha = 0;
+        cg.interactable = false;
+        cg.blocksRaycasts = false;
     }
 
 }

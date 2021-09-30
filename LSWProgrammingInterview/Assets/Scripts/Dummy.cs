@@ -7,7 +7,8 @@ public class Dummy : MonoBehaviour
 
     bool bought;
 
-    [SerializeField]int price;
+    
+    public int price;
 
     PlayerController p;
 
@@ -15,13 +16,17 @@ public class Dummy : MonoBehaviour
     public Sprite Torso;
     public Sprite Pelvis;
 
-
+    public List<WardrobeItem> prices;
 
     private void Start()
     {
         p = GameObject.Find("Player").GetComponent<PlayerController>();
-    }
 
+        foreach (WardrobeItem wi in prices)
+        {
+            price += wi.price;
+        }
+    }
 
     public void ChangeClothes()
     {
@@ -30,6 +35,10 @@ public class Dummy : MonoBehaviour
             p.allClothes.Add(Head);
             p.allClothes.Add(Torso);
             p.allClothes.Add(Pelvis);
+        }
+        else
+        {
+            bought = true;
         }
         
 
